@@ -1,11 +1,25 @@
 window.addEventListener('DOMContentLoaded', () => {
 
+
     function getData() {
+        const goodsWrapper = document.querySelector('.product__area');
+        return fetch('products.json')
+            .then((Response) => {
+                if (Response.ok) {
+                    return Response.json();
+                } else {
+                    throw new Error('Данные не были получены, ошибка: ' +
+                        Response.status);
+                }
+            })
+            .then((data) => {
+                return renderCard(data);
+            })
 
-        fetch('products.json')
-            .then(response => response.json())
-            .then(data => renderCard(data));
-
+        .catch((err) => {
+            console.warn(err);
+            goodsWrapper.innerHTML = '<div style="color:red;font-size: 30px;">Упс что-то пошло не так</div>';
+        });
     }
     getData();
 
@@ -97,7 +111,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             </div>
-            </div> -->
+            </div> 
                 `;
             goodsWrapper.appendChild(card);
 
@@ -106,9 +120,6 @@ window.addEventListener('DOMContentLoaded', () => {
         itemCounter();
         changeColor();
     }
-    // getData();
-
-
 
     function itemCounter() {
         const arrowUp = document.querySelector('.stepper-arrow.up');
@@ -139,7 +150,6 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-
     function changeColor() {
         const select = document.querySelector('.unit--select.unit--active');
         const nonSelect = document.querySelector('.red');
@@ -156,9 +166,5 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
     }
-
-
-
-
 
 });
